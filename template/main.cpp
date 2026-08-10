@@ -18,6 +18,11 @@ using namespace std;
 constexpr int MOD = 1e9 + 7;
 
 int main() {
+    #ifndef DEBUG
+    freopen("input.txt", "r", stdin);
+    freopen("user_output.txt", "w", stdout);
+    #endif
+
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
