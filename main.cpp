@@ -40,7 +40,7 @@ int main() {
     // CREATE RUN FILE
     std::string run_file_path = problem_folder.name() + "/run.sh";
     File run_file(run_file_path);
-    std::string run_file_content = "g++ -O2 -funroll-loops -std=c++17 -Wall -Wextra -DDEBUG main.cpp -o main\n./main\necho \"--- Difference between example output and your output ---\"\ndiff -y output.txt user_output.txt";
+    std::string run_file_content = "g++ -O2 -funroll-loops -std=c++17 -Wall -Wextra main.cpp -o main\n./main\necho \"--- Difference between example output and your output ---\"\ndiff -y output.txt user_output.txt";
     run_file.assign_to_file(run_file_content);
     std::cout << "[004] Successfully created run.sh file" << std::endl;
 
