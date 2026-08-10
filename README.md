@@ -9,9 +9,9 @@ So this program is target for people who is lazy, want to create a folder to con
 **Note:** This program is build in Linux Ubuntu, if you want on Windows or Macs, then clone the repo and build it yourself 
 
 ## How to use (install)
-First, when you install the package, remember to unzip it.
+First, when you install the package at the Built-File, remember to unzip it.
 
-![alt text](image.png)
+![alt text](image-1.png)
 
 Then, give permision to the installation script by using:
 ``` bash
