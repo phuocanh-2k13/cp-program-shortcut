@@ -11,6 +11,8 @@ So this program is target for people who is lazy, want to create a folder to con
 ## How to use (install)
 First, when you install the package, remember to unzip it.
 
+![alt text](image.png)
+
 Then, give permision to the installation script by using:
 ``` bash
 chmod +x install.sh
@@ -19,7 +21,7 @@ _In case you don't trust install.sh, then go review it yourself_
 
 After that, run this command:
 ``` bash
-sudo ./install.sh
+./install.sh
 ```
 
 Then try run cp-setup, if it does appear something like, enter your problem name, the you're succes.
