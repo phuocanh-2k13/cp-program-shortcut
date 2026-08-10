@@ -3,9 +3,15 @@
 
 namespace fs = std::filesystem;
 
-
 int main() {
     std::ios::sync_with_stdio(false);
+
+    // GET HOME ENVIRONMENT
+    const char* home_env = std::getenv("HOME");
+    if (home_env == nullptr) {
+        std::cerr << "[ERROR] HOME environment variable is not set" << std::endl;
+        return EXIT_FAILURE;
+    }
 
     // CREATE FOLDER PROJECT
     std::string problem_name;
@@ -16,13 +22,14 @@ int main() {
 
     // CREATE MAIN.CPP FILE
     std::string main_cpp_path = problem_folder.name() + "/main.cpp";
+    fs::path template_path = fs::path(home_env) / ".local/bin/template/main.cpp"; // PATH TO TEMPLATE FILE
     File main_cpp(main_cpp_path);
     try {
-        if (!fs::exists("template/main.cpp")) {
-            std::cerr << "[ERROR] Template file does not exist: template/main.cpp. No need to assign templates" << std::endl;
+        if (!fs::exists(template_path)) {
+            std::cerr << "[ERROR] Template file does not exist: " << template_path << ". No need to assign templates" << std::endl;
         }
         else {
-            fs::copy_file("template/main.cpp", main_cpp_path, fs::copy_options::overwrite_existing);
+            fs::copy_file(template_path, main_cpp_path, fs::copy_options::overwrite_existing);
             std::cout << "[002] Successfully created main.cpp file" << std::endl;
         }
     } catch (const fs::filesystem_error& e) {
