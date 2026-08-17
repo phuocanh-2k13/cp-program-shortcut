@@ -12,22 +12,15 @@ File createFile(const std::string& path) {
     return file;
 }
 
-bool assignTemplate(const std::string& template_path, const std::string& file_path, const std::string& template_type) {
+bool assignTemplate(const std::string& template_path, const std::string& file_path) {
     try {
         if (!fs::exists(template_path)) {
             std::cerr << "[ERROR] Template file does not exist: " << template_path << ". No need to assign templates" << std::endl;
             return false;
         }
         else {
-            if (template_type == "leetcode") {
-                fs::copy_file(template_path + "/leetcode_template.cpp", file_path, fs::copy_options::overwrite_existing);
-                std::cout << "[002] Successfully created " << template_type << " file" << std::endl;
-            }
-            else {
-                fs::copy_file(template_path + "/default_template.cpp", file_path, fs::copy_options::overwrite_existing);
-                std::cout << "[002] Successfully created " << template_type << " file" << std::endl;
-            }
-            
+            fs::copy_file(template_path, file_path, fs::copy_options::overwrite_existing);
+            std::cout << "[002] Successfully asssign template file" << std::endl;
             return true;
         }
     } catch (const fs::filesystem_error& e) {
@@ -37,8 +30,8 @@ bool assignTemplate(const std::string& template_path, const std::string& file_pa
 }
 
 std::pair<File, File> createIOFiles(const std::string& file_name, const std::string& folder_path) {
-    std::string input_file_path = folder_path + "/" + file_name + ".txt";
-    std::string output_file_path = folder_path + "/" + file_name + ".txt";
+    std::string input_file_path = folder_path + "/" + (file_name != "none" ? file_name : "input") + ".txt";
+    std::string output_file_path = folder_path + "/" + (file_name != "none" ? file_name : "output") + ".txt";
     File input_file(input_file_path);
     File output_file(output_file_path);
     return {input_file, output_file};
