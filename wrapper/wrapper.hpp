@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <string>
+#include <fstream>
 namespace fs = std::filesystem;
 
 // FOLDER HEADER DECLARE
@@ -21,7 +22,18 @@ private:
     std::ofstream ofs;
 
 public:
-    File(const std::string& p);
+    // Constructor
+    explicit File(const std::string& p);
+
+    // Disable copying
+    File(const File&) = delete;
+    File& operator=(const File&) = delete;
+
+    // Enable moving
+    File(File&&) noexcept = default;
+    File& operator=(File&&) noexcept = default;
+
     bool assign(const std::string& content);
     std::string name();
+    ~File() = default;
 };

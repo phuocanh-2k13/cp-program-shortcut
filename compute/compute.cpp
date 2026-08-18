@@ -1,6 +1,8 @@
 #include "../wrapper/wrapper.hpp"
+#include <algorithm>
 #include <iostream>
 #include <vector>
+#include <utility>
 
 Folder createFolder(const std::string& path) {
     Folder folder(path);
@@ -34,7 +36,7 @@ std::pair<File, File> createIOFiles(const std::string& file_name, const std::str
     std::string output_file_path = folder_path + "/" + (file_name != "none" ? file_name : "output") + ".txt";
     File input_file(input_file_path);
     File output_file(output_file_path);
-    return {input_file, output_file};
+    return { std::move(input_file), std::move(output_file) };
 }
 
 File createRunFile(const std::string& IO_name, const std::string& folder_path) {

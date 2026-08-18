@@ -34,6 +34,3 @@ bool File::assign(const std::string& content) {
 std::string File::name() {
     return path.filename().string();
 }
-File::~File() {
-    ofs.close();
-}
