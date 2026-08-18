@@ -1,4 +1,4 @@
-CXX = clang++
+CXX = g++
 CXXFLAGS = -O2 -funroll-loops -std=c++17 -Wall -Wextra
 
 TEMPLATE_DIR = template
@@ -19,8 +19,9 @@ $(TARGET): $(SRC)
 build: $(TARGET)
 	mkdir -p $(BUILD_DIR)
 	mv $(TARGET) $(BUILD_DIR)/
-	cp $(TEMPLATE_DIR)/template_default.cpp $(BUILD_DIR)/template_default.cpp
-	cp $(TEMPLATE_DIR)/template_leetcode.cpp $(BUILD_DIR)/template_leetcode.cpp
+	mkdir -p $(BUILD_DIR)/$(TEMPLATE_DIR)
+	cp $(TEMPLATE_DIR)/template_default.cpp $(BUILD_DIR)/$(TEMPLATE_DIR)/template_default.cpp
+	cp $(TEMPLATE_DIR)/template_leetcode.cpp $(BUILD_DIR)/$(TEMPLATE_DIR)/template_leetcode.cpp
 
 test: CXXFLAGS += -DDEBUG -g
 test: build
