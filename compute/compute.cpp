@@ -32,8 +32,8 @@ bool assignTemplate(const std::string& template_path, const std::string& file_pa
 }
 
 std::pair<File, File> createIOFiles(const std::string& file_name, const std::string& folder_path) {
-    std::string input_file_path = folder_path + "/" + (file_name != "none" ? file_name : "input") + ".txt";
-    std::string output_file_path = folder_path + "/" + (file_name != "none" ? file_name : "output") + ".txt";
+    std::string input_file_path = folder_path + "/" + (file_name != "default" ? file_name : "input") + ".in";
+    std::string output_file_path = folder_path + "/" + (file_name != "default" ? file_name : "output") + ".out";
     File input_file(input_file_path);
     File output_file(output_file_path);
     return { std::move(input_file), std::move(output_file) };
@@ -47,9 +47,9 @@ File createRunFile(const std::string& IO_name, const std::string& folder_path) {
         "if [ \"$1\" == \"CHECK\" ]; then",
         "echo \"--- Checking for differences between example output and your output ---\"",
         "g++ -O2 -funroll-loops -std=c++17 -Wall -Wextra main.cpp -o main",
-        "./main < " + IO_name + ".txt > user_output.txt",
+        "./main < " + (IO_name == "default" ? "input" : IO_name) + ".in > user_output.out",
         "echo \"--- Difference between example output and your output ---\"",
-        "diff -y --suppress-common-lines " + IO_name + ".txt user_output.txt",
+        "diff -y --suppress-common-lines " + (IO_name == "default" ? "output" : IO_name) + ".out user_output.out",
         "else",
         "g++ -O2 -funroll-loops -std=c++17 -Wall -Wextra main.cpp -o main",
         "./main",

@@ -15,27 +15,34 @@ int main() {
     // CREATE FOLDER PROJECT
     std::string problem_name;
     std::cout << "[001] Enter problem name: ";
-    std::cin >> problem_name;
+    std::getline(std::cin, problem_name);
     Folder problem_folder = createFolder(problem_name);
     std::cout << "[001] Successfully created folder: " << problem_folder.name() << std::endl;
 
     // // CREATE MAIN.CPP FILE
     std::string template_type;
-    std::cout << "[002] Enter template type ([other]/leetcode): ";
-    std::cin >> template_type;
+    std::cout << "[002] Enter template type (Default/leetcode): ";
+    std::getline(std::cin, template_type);
 
     // ASSIGN TEMPLATE TO MAIN.CPP FILE
     std::string main_cpp_path = problem_folder.name() + "/main.cpp";
-    std::string template_path = std::string(home_env) + "/.local/bin/template/template_" + (template_type == "leetcode" ? "leetcode" : "default") + ".cpp"; // PATH TO TEMPLATE FILE
-    if (!assignTemplate(template_path, main_cpp_path)) {
+    std::string template_path;
+    # ifdef DEBUG
+    template_path = std::string("./template/template_") + (template_type == "leetcode" ? "leetcode" : "default") + ".cpp";
+    #else
+    template_path = std::string(home_env) + "/.local/bin/template/template_" + (template_type == "leetcode" ? "leetcode" : "default") + ".cpp";
+    #endif
+    if (!assignTemplate(template_path, main_cpp_path))
         std::cerr << "[ERROR] Failed to assign template file" << std::endl;
-        return EXIT_FAILURE;
-    }
 
     // CREATE INPUT, OUTPUT FILES
-    std::string IO_name;
-    std::cout << "[003] Enter input/output file name (none/filename): ";
-    std::cin >> IO_name;
+    std::string IO_name = "default";
+    std::cout << "[003] Enter input/output file name (Enter if default/filename): ";
+
+    std::string temp;
+    std::getline(std::cin, temp);
+    if (!temp.empty()) IO_name = temp;
+
     createIOFiles(IO_name, problem_folder.name());
 
     // CREATE RUN FILE
@@ -44,6 +51,8 @@ int main() {
 
     // GIVE EXECUTION PERMISSION TO RUN FILE
     giveExecutionPermission(problem_folder.name() + "/run.sh");
+
+
 
     // END
     std::cout << "==== COMPLETE ====" << std::endl;
