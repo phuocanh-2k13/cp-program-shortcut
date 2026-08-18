@@ -1,5 +1,4 @@
 #include "../wrapper/wrapper.hpp"
-#include <algorithm>
 #include <iostream>
 #include <vector>
 #include <utility>
