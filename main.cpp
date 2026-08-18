@@ -26,8 +26,9 @@ int main() {
     std::cout << "[002] Enter template type ([other]/leetcode): ";
     std::cin >> template_type;
     
+    // ASSIGN TEMPLATE TO MAIN.CPP FILE
     std::string main_cpp_path = problem_folder.name() + "/main.cpp";
-    std::string template_path = std::string(home_env) + "/.local/bin/template/template_" + template_type + ".cpp"; // PATH TO TEMPLATE FILE
+    std::string template_path = std::string(home_env) + "/.local/bin/template/template_" + (template_type == "leetcode" ? "leetcode" : "default") + ".cpp"; // PATH TO TEMPLATE FILE
     if (!assignTemplate(template_path, main_cpp_path)) {
         std::cerr << "[ERROR] Failed to assign template file" << std::endl;
         return EXIT_FAILURE;
