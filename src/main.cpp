@@ -2,6 +2,9 @@
 #include <string>
 #include "../wrapper/wrapper.hpp"
 #include "../compute/compute.hpp"
+#include "../nlohmann/json.hpp"
+
+using json = nlohmann::json;
 
 int main() {
     std::ios::sync_with_stdio(false);
@@ -55,6 +58,22 @@ int main() {
 
     // END
     std::cout << "==== COMPLETE ====" << std::endl;
+
+    // OPEN FOLDER, OR CODE???
+    std::ifstream configFile(std::string(home_env) + "/.local/bin/config.json");
+    json config;
+    configFile >> config;
+
+    std::string editorCmd = config["editor"];
+    std::string runCmd;
+    if (editorCmd == "subl" || editorCmd == "code" || editorCmd == "zed") {
+        runCmd = editorCmd + " " + problem_name;
+    }
+    else if (editorCmd != "none") {
+        runCmd = editorCmd + " " + problem_name + "/" + "main.cpp";
+    }
+    
+    if (editorCmd != "none") system(runCmd.c_str());
 
     return 0;
 }
