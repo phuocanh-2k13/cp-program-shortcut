@@ -2,6 +2,9 @@
 
 A tool for quickly setting up templates for Competitive Programming, with pre-built templates for common problem types.
 
+## Sponsor
+Thanks to nlohmann for json header
+
 ## Features
 - Automatically sets up your workspace: `main.cpp`, `input.in`, `output.out`.
 - Generates a ready-to-use `run.sh`, so you can just run `./run.sh CHECK` instead of typing long compile commands.
