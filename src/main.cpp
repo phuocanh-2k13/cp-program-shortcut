@@ -1,6 +1,7 @@
-#include <bits/stdc++.h>
-#include "wrapper/wrapper.hpp"
-#include "compute/compute.hpp"
+#include <iostream>
+#include <string>
+#include "../wrapper/wrapper.hpp"
+#include "../compute/compute.hpp"
 
 int main() {
     std::ios::sync_with_stdio(false);
@@ -51,8 +52,6 @@ int main() {
 
     // GIVE EXECUTION PERMISSION TO RUN FILE
     giveExecutionPermission(problem_folder.name() + "/run.sh");
-
-
 
     // END
     std::cout << "==== COMPLETE ====" << std::endl;
