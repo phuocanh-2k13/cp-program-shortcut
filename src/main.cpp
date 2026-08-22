@@ -73,7 +73,9 @@ int main() {
         runCmd = editorCmd + " " + problem_name + "/" + "main.cpp";
     }
     
-    if (editorCmd != "none") system(runCmd.c_str());
+    if (editorCmd != "none") {
+        system(runCmd.c_str());
+    }
 
     return 0;
 }
