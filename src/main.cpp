@@ -1,81 +1,103 @@
-#include <iostream>
-#include <string>
-#include "../wrapper/wrapper.hpp"
 #include "../compute/compute.hpp"
 #include "../nlohmann/json.hpp"
+#include "../wrapper/wrapper.hpp"
+#include <iostream>
+#include <string>
 
 using json = nlohmann::json;
 
 int main() {
-    std::ios::sync_with_stdio(false);
+  std::ios::sync_with_stdio(false);
 
-    // GET HOME ENVIRONMENT
-    const char* home_env = std::getenv("HOME");
-    if (home_env == nullptr) {
-        std::cerr << "[ERROR] HOME environment variable is not set" << std::endl;
-        return EXIT_FAILURE;
-    }
+  // GET HOME ENVIRONMENT
+  const char *home_env = std::getenv("HOME");
+  if (home_env == nullptr) {
+    std::cerr << "[ERROR] HOME environment variable is not set" << std::endl;
+    return EXIT_FAILURE;
+  }
 
-    // CREATE FOLDER PROJECT
-    std::string problem_name;
-    std::cout << "[001] Enter problem name: ";
-    std::getline(std::cin, problem_name);
-    Folder problem_folder = createFolder(problem_name);
-    std::cout << "[001] Successfully created folder: " << problem_folder.name() << std::endl;
+  // CREATE FOLDER PROJECT
+  std::string problem_name;
+  std::cout << "[001] Enter problem name: ";
+  std::getline(std::cin, problem_name);
+  Folder problem_folder = createFolder(problem_name);
+  std::cout << "[001] Successfully created folder: " << problem_folder.name()
+            << std::endl;
 
-    // // CREATE MAIN.CPP FILE
-    std::string template_type;
-    std::cout << "[002] Enter template type (Default/leetcode): ";
-    std::getline(std::cin, template_type);
+  // // CREATE MAIN.CPP FILE
+  std::string template_type;
+  std::cout << "[002] Enter template type (Default/leetcode): ";
+  std::getline(std::cin, template_type);
 
-    // ASSIGN TEMPLATE TO MAIN.CPP FILE
-    std::string main_cpp_path = problem_folder.name() + "/main.cpp";
-    std::string template_path;
-    # ifdef DEBUG
-    template_path = std::string("./template/template_") + (template_type == "leetcode" ? "leetcode" : "default") + ".cpp";
-    #else
-    template_path = std::string(home_env) + "/.local/bin/template/template_" + (template_type == "leetcode" ? "leetcode" : "default") + ".cpp";
-    #endif
-    if (!assignTemplate(template_path, main_cpp_path))
-        std::cerr << "[ERROR] Failed to assign template file" << std::endl;
+  // ASSIGN TEMPLATE TO MAIN.CPP FILE
+  std::string main_cpp_path = problem_folder.name() + "/main.cpp";
+  std::string template_path;
+#ifdef DEBUG
+  template_path = std::string("./template/template_") +
+                  (template_type == "leetcode" ? "leetcode" : "default") +
+                  ".cpp";
+#else
+  template_path = std::string(home_env) + "/.local/bin/template/template_" +
+                  (template_type == "leetcode" ? "leetcode" : "default") +
+                  ".cpp";
+#endif
+  if (!assignTemplate(template_path, main_cpp_path))
+    std::cerr << "[ERROR] Failed to assign template file" << std::endl;
 
-    // CREATE INPUT, OUTPUT FILES
-    std::string IO_name = "default";
-    std::cout << "[003] Enter input/output file name (Enter if default/filename): ";
+  // CREATE INPUT, OUTPUT FILES
+  std::string IO_name = "default";
+  std::cout
+      << "[003] Enter input/output file name (Enter if default/filename): ";
 
-    std::string temp;
-    std::getline(std::cin, temp);
-    if (!temp.empty()) IO_name = temp;
+  std::string temp;
+  std::getline(std::cin, temp);
+  if (!temp.empty())
+    IO_name = temp;
 
-    createIOFiles(IO_name, problem_folder.name());
+  createIOFiles(IO_name, problem_folder.name());
 
-    // CREATE RUN FILE
-    createRunFile(IO_name, problem_folder.name());
-    std::cout << "[004] Successfully created run.sh file" << std::endl;
+  // CREATE RUN FILE
+  createRunFile(IO_name, problem_folder.name());
+  std::cout << "[004] Successfully created run.sh file" << std::endl;
 
-    // GIVE EXECUTION PERMISSION TO RUN FILE
-    giveExecutionPermission(problem_folder.name() + "/run.sh");
+  // GIVE EXECUTION PERMISSION TO RUN FILE
+  giveExecutionPermission(problem_folder.name() + "/run.sh");
 
-    // END
-    std::cout << "==== COMPLETE ====" << std::endl;
+  // END
+  std::cout << "==== COMPLETE ====" << std::endl;
 
-    // OPEN FOLDER, OR CODE???
-    std::ifstream configFile(std::string(home_env) + "/.local/bin/config.json");
-    json config;
-    configFile >> config;
+  // OPEN FOLDER, OR CODE???
+  std::string config_path = std::string(home_env) + "/.local/bin/config.json";
+  std::ifstream configFile(config_path);
 
-    std::string editorCmd = config["editor"];
-    std::string runCmd;
-    if (editorCmd == "subl" || editorCmd == "code" || editorCmd == "zed") {
-        runCmd = editorCmd + " " + problem_name;
-    }
-    else if (editorCmd != "none") {
-        runCmd = editorCmd + " " + problem_name + "/" + "main.cpp";
-    }
-    
-    if (editorCmd != "none") {
-        system(runCmd.c_str());
-    }
-
+  if (!configFile.is_open()) {
+    std::cerr
+        << "[WARNING] Could not open config file, skipping editor launch.\n";
     return 0;
+  }
+
+  json config;
+  try {
+    configFile >> config;
+  } catch (const json::parse_error &e) {
+    std::cerr << "[WARNING] Invalid config.json: " << e.what() << "\n";
+    return 0;
+  }
+
+  std::string editorCmd = config.value("editor", "none");
+  std::string runCmd;
+
+  if (editorCmd == "subl" || editorCmd == "code" || editorCmd == "zed") {
+    runCmd = editorCmd + " \"" + problem_folder.name() + "\"";
+  } else if (editorCmd != "none") {
+    runCmd = editorCmd + " \"" + problem_folder.name() + "/main.cpp\"";
+  }
+
+  if (editorCmd != "none" && !runCmd.empty()) {
+    if (std::system(runCmd.c_str()) != 0) {
+      std::cerr << "[WARNING] Failed to launch editor.\n";
+    }
+  }
+
+  return 0;
 }
