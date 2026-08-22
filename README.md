@@ -36,6 +36,3 @@ cp-setup
 ```
 
 Follow the on-screen prompts — everything will be set up automatically.
-
-## License
-(thêm nếu có, ví dụ MIT)
