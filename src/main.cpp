@@ -1,12 +1,14 @@
 #include "../compute/compute.hpp"
 #include "../nlohmann/json.hpp"
 #include "../wrapper/wrapper.hpp"
+#include <cstdlib>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 using json = nlohmann::json;
 
-int main() {
+int main(int argc, char* argv[]) {
   std::ios::sync_with_stdio(false);
 
   // GET HOME ENVIRONMENT
@@ -18,11 +20,21 @@ int main() {
 
   // CREATE FOLDER PROJECT
   std::string problem_name;
-  std::cout << "[001] Enter problem name: ";
-  std::getline(std::cin, problem_name);
+  if (argc > 1) {
+    try {
+      problem_name = argv[1];
+    } catch (const std::invalid_argument& e) {
+      std::cout << "Sorry, inexpected error occurs, please contact with the owner at haphixah1704@gmail.com and type your problem name manually" << std::endl;
+      return EXIT_FAILURE;
+    }
+  }
+  else {
+    std::cout << "[001] Enter problem name: ";
+    std::getline(std::cin, problem_name);
+  }
   Folder problem_folder = createFolder(problem_name);
-  std::cout << "[001] Successfully created folder: " << problem_folder.name()
-            << std::endl;
+  std::cout << "[001] Successfully created folder: " << problem_folder.name() << std::endl;
+
 
   // // CREATE MAIN.CPP FILE
   std::string template_type;

@@ -38,4 +38,6 @@ After installation completes, just run:
 cp-setup
 ```
 
+_If you use version 1.0.6 or later, you can type cp-setup <your_problem_name> instead_
+
 Follow the on-screen prompts — everything will be set up automatically.
