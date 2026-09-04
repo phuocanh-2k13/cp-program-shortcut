@@ -20,7 +20,7 @@ Thanks to nlohmann for json header
 
 ## Installation
 
-Download the latest release: **CP-Setup v1.0.4**
+Download the latest release: **CP-Setup v1.0.6**
 
 1. Unzip the release archive.
 2. Open a terminal in the extracted folder.
